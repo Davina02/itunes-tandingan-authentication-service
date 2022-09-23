@@ -7,6 +7,7 @@ import AuthorizeUserValidation from '../../common/validation/auth/AuthorizeUserV
 import { AuthControllerHandler } from '../../handler/AuthControllerHandler';
 import AuthenticateUserValidation from '../../common/validation/auth/AuthenticateUserValidation';
 import { CaptchaGenerator } from '../../common/facade/CaptchaGenerator';
+import { AuthorizationToken } from '../../common/facade/AuthorizationToken';
 
 const app = express.Router();
 
@@ -46,7 +47,7 @@ class UserController extends Controller {
     /**
      * Authenticate User API 
      * 
-     * This API will authenticate user by inputting this credentioals:
+     * This API will authenticate user by inputting this credentials:
      * - Phone
      * - OTP
      * 
@@ -95,7 +96,9 @@ class UserController extends Controller {
      */
     app.post("/logout", async (request: Request, response: Response) => {
 
-        await (new AuthControllerHandler().logout(request.headers.authorization!));
+        const data = await new AuthorizationToken().getMe(request.headers.authorization!);
+
+        await (new AuthControllerHandler().logout(data.id));
 
         return BaseResponse.ok(
             null,
@@ -111,10 +114,14 @@ class UserController extends Controller {
      */
     app.get("/me", async (request: Request, response: Response) => {
 
-        const data = await (new AuthControllerHandler().me(request.headers.authorization!));
+        const data = await new AuthorizationToken().getMe(request.headers.authorization!);
+
+        console.log(request.headers.authorization!);
+
+        const result = await (new AuthControllerHandler().me(data.id));
 
         return BaseResponse.ok(
-            data,
+            result,
             `Hi ${data.name}`,
             response
         );

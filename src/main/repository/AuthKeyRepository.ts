@@ -35,7 +35,7 @@ export interface AuthKeyRepository {
    * A repository that invalidate a token with 
    * requested user_id. 
    * 
-   * @param string user_id
+   * @param number user_id
    *    Reference to user_id in uma_tbl_users
    *
    */

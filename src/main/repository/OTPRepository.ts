@@ -19,4 +19,25 @@ export interface OTPRepository {
    */
   checkSameUnexpiredOTP(otp: string): Promise<OTP | null>;
 
+  /**
+   * validateOTP
+   *
+   * A function to validate OTP by phone and otp.
+   *
+   * @param phone
+   * @param otp
+   */
+   validateOTP(phone: string, otp: string): Promise<OTP>;
+
+  /**
+   * invalidateOTP
+   * A repository that invalidate otp with 
+   * requested user_id. 
+   * 
+   * @param number user_id
+   *    Reference to user_id in uma_tbl_users
+   *
+   */
+   invalidateOTP(user_id: number): Promise<void>;
+
 }

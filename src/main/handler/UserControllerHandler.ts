@@ -1,5 +1,6 @@
 import { AuthorizationToken } from "../common/facade/AuthorizationToken";
 import { CreateOTPMessageProducer } from "../messaging/producer/CreateOTPMessageProducer";
+import OTP from "../model/entity/uma.otp";
 import User from "../model/entity/uma.user";
 import AuthKeyRepositoryImpl from "../repository/impl/AuthKeyRepositoryImpl";
 import OTPRepositoryImpl from "../repository/impl/OTPRepositoryImpl";
@@ -46,7 +47,7 @@ export class UserControllerHandler {
              * Register user
              */
             const dto = {
-                user_id: data!.id!,
+                user_id: data!.user_id,
                 name: name,
                 phone: phone,
                 status: User.ACTIVE,
@@ -66,12 +67,12 @@ export class UserControllerHandler {
             /**
              * Create OTP
              */
-            const otp = await OTPRepositoryImpl.createOTP(userData!.id!, userData!.phone);
+            const otp: OTP = await OTPRepositoryImpl.createOTP(userData!.id!, userData!.phone);
 
             /**
              * Publish OTP to Redis with key: CREATE_OTP_MESSAGE
              */
-            new CreateOTPMessageProducer().produce(otp);
+            // new CreateOTPMessageProducer().produce(otp);
         }
         
     }

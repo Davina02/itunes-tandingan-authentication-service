@@ -8,16 +8,16 @@ class UserRepositoryImpl implements UserRepository {
 
   createUser = async (name: string): Promise<User> => {
     return User.create({
-      name: name
+      "name": name
     });
   }
     
 
   findUserByPhone = async (phone: string): Promise<User | null> =>
     User.findOne({
-      where: {
-        phone: phone,
-        is_deleted: 0
+      "where": {
+        "phone": phone,
+        "is_deleted": 0
       }
     }).then(resultSet => {
       return resultSet;
@@ -25,11 +25,13 @@ class UserRepositoryImpl implements UserRepository {
 
   updateUser = async (dto: UpdateUserDTO): Promise<User | null> => {
     const execution = await User.findOne({
-      where: {
-        id: dto.user_id,
-        is_deleted: 0
+      "where": {
+        "id": dto.user_id,
+        "is_deleted": 0
       }
-    }).then(resultSet => resultSet);
+    }).then(resultSet => {
+       return resultSet;
+    });
 
     if(execution === null){
       throw new UserNotFoundException();
@@ -47,9 +49,9 @@ class UserRepositoryImpl implements UserRepository {
 
   findUserById = async (id: number): Promise<User | null> =>
     User.findOne({
-      where: {
-        is_deleted: 0,
-        id: id
+      "where": {
+        "is_deleted": 0,
+        "id": id
       }
     }).then(resultSet => {
       return resultSet;
@@ -57,9 +59,9 @@ class UserRepositoryImpl implements UserRepository {
 
   findUserByPhoneNoNull = async (phone: string): Promise<User> =>
     User.findOne({
-      where: {
-        phone: phone,
-        is_deleted: 0
+      "where": {
+        "phone": phone,
+        "is_deleted": 0
       }
     }).then(resultSet => {
       if(resultSet === null){
@@ -70,9 +72,9 @@ class UserRepositoryImpl implements UserRepository {
 
   wrongOTPPunisher = async (id: number): Promise<void> => {
     const finds = await User.findOne({
-      where: {
-        id: id,
-        is_deleted: 0
+      "where": {
+        "id": id,
+        "is_deleted": 0
       }
     }).then(resultSet => {
       return resultSet;

@@ -17,9 +17,9 @@ export class AuthControllerHandler {
          */
         const user = await UserRepositoryImpl.findUserByPhone(phone);
 
-        if (user != null && user.status === User.ACTIVE) {
-            new AuthorizeOTPMessageProducer().produce(user);
-        }
+        // if (user != null && user.status === User.ACTIVE) {
+        //     new AuthorizeOTPMessageProducer().produce(user);
+        // }
         
     }
 
@@ -31,6 +31,8 @@ export class AuthControllerHandler {
         const code = await OTPRepositoryImpl.validateOTP(phone, otp);
 
         const user: User | null = await UserRepositoryImpl.findUserById(code.user_id);
+
+        await OTPRepositoryImpl.invalidateOTP(user!.id!);
 
         /**
          * Token Handshake
@@ -45,23 +47,24 @@ export class AuthControllerHandler {
         
     }
 
-    public async logout(token: string) {
+    public async logout(id: number) {
 
-        const data = await new AuthorizationToken().getMe(token);
+        await AuthKeyRepositoryImpl.invalidateToken(id);
 
-        await AuthKeyRepositoryImpl.invalidateToken(data.id);
+        // console.log(data);
         
     }
 
-    public async me(token: string): Promise<GetMeResponseDTO> {
-        const data = await new AuthorizationToken().getMe(token);
+    public async me(id: number): Promise<GetMeResponseDTO> {
 
-        const user = await UserRepositoryImpl.findUserById(data.id);
+        const user = await UserRepositoryImpl.findUserById(id);
 
         const myData = new GetMeResponseDTO();
         myData.name = user!.name;
         myData.phone = user!.phone;
         myData.status = user!.user_status;
+
+        // console.log(myData);
 
         return myData;
     }

@@ -73,6 +73,7 @@ export class AuthorizationToken {
   public async validateToken(token: string): Promise<boolean> {
 
     try{
+
       /**
        * Check if token had Bearer prefix 
        */
@@ -81,10 +82,9 @@ export class AuthorizationToken {
       if(valid_token === false) throw 'false';
 
       /**
-       * Check the if the token is expired or not.
+       * Check if the token is expired or not.
        */
       const decrypted_token: string = await this.getRealToken(valid_token);
-
 
       /**
        * Verify if the saved token is valid or not.
@@ -95,7 +95,8 @@ export class AuthorizationToken {
 
       return true;
       
-    }catch (error) {
+    }catch (error: any) {
+      console.log(error.message);
       return false;
     }
   }
@@ -120,7 +121,6 @@ export class AuthorizationToken {
    * getRealToken
    * 
    * @param string uuid
-   *    Reference to uuid_token in uma_tbl_jwt_token
    * 
    * @return string jwt_token
    */

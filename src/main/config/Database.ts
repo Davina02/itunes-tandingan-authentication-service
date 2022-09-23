@@ -19,8 +19,10 @@ const mainConnection = (): Sequelize => {
       "port"        : config.database.main.port,
       // "logging"     : (... msg) => console.log(msg),
       "logging"     : false,
-      "models"      : [path.join(__dirname, "../model/entity")]
-    }
+      "models"      : [path.join(__dirname, "../model/entity")],
+      "timezone"    : "+07:00"
+    },
+    
   );
 
   sequelize

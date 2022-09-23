@@ -39,7 +39,7 @@ export class BaseResponse {
     baseResponse.data = data || null;
 
     if (process.env.APP_DEBUG == "true") {
-      console.log(res);
+      // console.log(res);
     }
 
     return res
